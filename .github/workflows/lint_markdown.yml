@@ -1,0 +1,27 @@
+name: Lint Markdown
+
+on:
+  push:
+    branches:
+      - main  # 指定要触发工作流程的分支
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest  # 使用最新版本的Ubuntu作为运行环境
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2  # 检出仓库代码
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2  # 设置Node.js环境
+        with:
+          node-version: 14  # 使用Node.js 14版本
+
+      - name: Install Dependencies
+        run: npm install -g proselint write-good  # 安装proselint和write-good工具
+
+      - name: Lint Markdown Files
+        run: |
+          find . -name "*.md" -type f -exec proselint {} +  # 使用proselint检查Markdown文件
+          find . -name "*.md" -type f -exec write-good {} +  # 使用write-good检查Markdown文件
